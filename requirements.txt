@@ -13,3 +13,4 @@ umap-learn
 Pillow
 hdbscan
 tensorly
+torch
