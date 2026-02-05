@@ -9,6 +9,7 @@ from functools import partial
 from tqdm import tqdm
 import torch
 from torch.utils.data import Dataset as TorchDataset
+from glob import glob
 
 
 
@@ -61,33 +62,39 @@ class EIRDataset:
     def __load_dataset(self):
         all_tasks = []
         index = 0
-
+    
         for exp_path in tqdm(self.exp_paths, desc="Processing exp_paths"):
             subject_id = int(os.path.basename(os.path.dirname(exp_path)).replace("S_", ""))
             trial_id = int(os.path.basename(exp_path).replace("Trial_", ""))
-
+    
             with open(os.path.join(exp_path, "labels.json"), "r") as f:
                 labels_data = json.load(f)["blocks"]
-
+    
             for block in labels_data:
                 task_type = block["type"]
                 if task_type == self.task_type or self.task_type == 'all':
                     exec_idx = block["Exec_Block_Index"]
                     pattern_id = block.get("pattern_id", -1)
-
-                    eeg_path = os.path.join(exp_path, f"exec_EEG_{exec_idx}.fif")
-                    eye_path = os.path.join(exp_path, f"exec_EOG_{exec_idx}.fif")
-
-                    if not (os.path.exists(eeg_path) and os.path.exists(eye_path)):
+    
+                    # search files by the template <any_text>_EEG_<index>.fif and <any_text>_EOG_<index>.fif 
+                    eeg_candidates = glob(os.path.join(exp_path, f"*_EEG_{exec_idx}.fif"))
+                    eog_candidates = glob(os.path.join(exp_path, f"*_EOG_{exec_idx}.fif"))
+    
+                    if not eeg_candidates or not eog_candidates:
                         print(f"Skipping: EEG or EOG file missing for exec_idx={exec_idx} in {exp_path}")
                         continue
-
+    
+                    # Get first candidate (mostly there is only 1 candidate)
+                    eeg_path = eeg_candidates[0]
+                    eye_path = eog_candidates[0]
+    
                     self.suply_data.loc[len(self.suply_data)] = {
                         "index": index,
                         "subject_id": subject_id,
                         "trial_id": trial_id,
                         "task_type": task_type
                     }
+    
                     self.labels.append(pattern_id)
                     self.imgs.append(np.array(block["img"]))
                     all_tasks.append((eeg_path, eye_path, index))

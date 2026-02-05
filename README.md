@@ -49,7 +49,7 @@ EEG-Visual-Experiment/
 │   ├── Data_Loader.py                 # Module: load FIF, labels, patterns
 │   ├── Statistical_Tester.py          # Module: band-power statistical testing
 │   ├── Preprocessing.py               # Script: full-dataset preprocessing (like Preprocessing.ipynb)
-│   ├── Rebuild_Train_Dataset.py       # Script: slice exec/rest training windows
+│   ├── Block_Selector.py              # Script: slice windows from all data by "block_type"
 │   ├── Selectors_From_Dataset.py      # Script: sample by subject/trial
 │   ├── EEGModels.py                   # Module: EEG CNNs (EEGNet etc., Keras/TensorFlow)
 │   └── Spectral_Analysis/             # Spectral analysis automation

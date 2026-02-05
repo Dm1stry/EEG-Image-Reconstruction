@@ -14,6 +14,8 @@ This directory contains precomputed spectral representations of EEG data, stored
 | `exec_morlets.npz` | ...TODO... | (63, 195, 321) or (63, 195, 310) | 2–40 Hz | 0.2 Hz | 16 s | 50 ms |
 | `psds_array_fft.npz` | ...TODO... | (63, 381) | 2–40 Hz | 0.1 Hz | Full experiment | — |
 | `psds_array_morlet.npz` | ...TODO... | (63, 80) | 2–40 Hz | 0.5 Hz | Full experiment | — |
+| `pattern_fft.npz` | ...TODO... | (63, 381) | 2–40 Hz | 0.1 Hz | 26 s | — |
+| `pattern_morlets.npz` | ...TODO... | (63, 195, 520) | 2–40 Hz | 0.2 Hz | 26 s | 50 ms |
 ---
 
 **Note:** For FFT files, time resolution is absent due to the limitations of the method.
@@ -97,6 +99,36 @@ Each entry is a PSD summarizing one complete record over the whole experiment. U
 - **Sample duration:** Full experiment (exact duration to be documented)
 
 Same role as `psds_array_fft.npz` but with Morlet-based PSDs and coarser frequency resolution (0.5 Hz, 80 bins in 2–40 Hz). Use when preferring wavelet-derived PSDs or when lower frequency resolution is sufficient.
+
+---
+
+### 7. `pattern_fft.npz`
+
+**Fourier spectra: pattern blocks only.**
+
+- **Spectrum shape:** `(63, 381)`  
+  - 63: number of electrodes  
+  - 381: number of frequency bins  
+- **Sample duration:** 26 s  
+- **Frequency resolution:** 0.1 Hz  
+
+FFT spectra for fixed-length 26s pattern block (when subjec see the pattern) +-0.5s. Same frequency setup as other FFT files (2–40 Hz, 0.1 Hz). Use for frequency-only analysis of pattern intervals.
+
+---
+
+### 8. `pattern_morlets.npz`
+
+**Morlet wavelet spectra: pattern blocks only.**
+
+- **Spectrum shape:** `(63, 195, 520)` (third dimension may vary)  
+  - 63: number of electrodes  
+  - 195: number of frequency bins  
+  - 520: number of time points (26 s ÷ 50 ms)  
+- **Sample duration:** 26 s  
+- **Time resolution:** 50 ms  
+- **Frequency resolution:** 0.2 Hz  
+
+Time–frequency representation for the 26s pattern block (when subjec see the pattern) +-0.5s as in `pattern_fft.npz`, with 50 ms time steps and 0.2 Hz frequency steps. Use when temporal evolution of power within the pattern window is needed.
 
 ---
 
