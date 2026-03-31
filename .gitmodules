@@ -1,0 +1,3 @@
+[submodule "Notebooks/BrainBERT/BrainBERT"]
+	path = Notebooks/BrainBERT/BrainBERT
+	url = git@github.com:czlwang/BrainBERT.git

@@ -13,6 +13,7 @@ Generated/Generated
 Generated/Data_Train
 topomap_frames
 Notebooks/TEMP.ipynb
+Notebooks/BrainBERT/pretrained_weights
 
 eeg_channel.mp3
 eog_animation_30fps.mp4
