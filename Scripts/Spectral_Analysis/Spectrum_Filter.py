@@ -32,12 +32,15 @@ def _get_day_time_df(day_time_meta_path):
     )
     meta = meta[meta['Subject_id'].notna()].copy()
     meta['Subject_id'] = meta['Subject_id'].astype(int)
-    
+
+    # Вот отсюда...
     s  = meta['Time'].astype(str).str.strip()                    
     n  = pd.to_numeric(s, errors='coerce')                        
-    dt_str = pd.to_datetime(s, errors='coerce', dayfirst=True, infer_datetime_format=True)
+    dt_str = pd.to_datetime(s, errors='coerce', infer_datetime_format=True)
     dt_num = pd.to_datetime(n, errors='coerce', origin='1899-12-30', unit='D')
     dt = dt_str.fillna(dt_num)                                   
+    # ...и до сюда - GPT-кадавр который мало того что не должен существовать, так ещё и не работает нормально. Итог - все даты где день >= 12 не подтягиваются
+    # UPD: нашёл почему это произошло, первый раз писалось для старых данных. А они писались с 1 по 10 числа, то есть на этапе первичной отладки это было не поймать
     
     meta['Hour'] = dt.dt.hour
     meta['Time'] = dt.dt.strftime('%H:%M')
